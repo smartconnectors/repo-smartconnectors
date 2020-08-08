@@ -1,0 +1,259 @@
+<div *ngIf="connectorPos == 'source'">
+    <mat-horizontal-stepper #stepper [selectedIndex]="stepperSelectedIndex">
+        <mat-step>
+            <ng-template matStepLabel>Build simple Query</ng-template>
+            <ng-container *ngTemplateOutlet="simpleQueryBuilder"></ng-container>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Build Relationship Query</ng-template>
+            <ng-container *ngTemplateOutlet="relationshipQueryBuilder"></ng-container>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Execute</ng-template>
+            <ng-container *ngTemplateOutlet="queryExecution"></ng-container>
+        </mat-step>
+    </mat-horizontal-stepper>
+</div>
+
+<div *ngIf="connectorPos == 'target'">
+    <mat-form-field>
+        <mat-label>Operation selection</mat-label>
+        <mat-select aria-placeholder="Operation selection" class="pt-3" [(ngModel)]="targetOperationType"
+            (selectionChange)="onTargetOperationTypeChange($event)">
+            <mat-option value="">Select Operation</mat-option>
+            <mat-option *ngFor="let item of operationTypes" [value]="item">
+                {{item.name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <div class="row">
+        <div class="col">
+            <mat-form-field class="w-100">
+                <input type="text" placeholder="Search Target Objects" aria-label="Number" matInput
+                    [matAutocomplete]="auto" [(ngModel)]="selectedTargetObjectType.label"
+                    (input)="onTargetObjectTypeInput($event)">
+                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onTargetObjectSelection($event)">
+                    <mat-option *ngFor="let option of filteredParentObjectList" [value]="option">
+                        {{option.label}}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <button mat-raised-button color="primary" class="mt-2" (click)="onNavigateToTransformation($event)">
+                Transform
+            </button>
+        </div>
+    </div>
+</div>
+<ng-template #simpleQueryBuilder>
+    <div class="row">
+        <div class="col mx-4">
+            <mat-form-field class="w-100">
+                <input type="text" placeholder="Search Objects" aria-label="Number" matInput [matAutocomplete]="auto"
+                    [(ngModel)]="selectedParentObjectType.label" (input)="onParentObjectTypeInput($event)">
+                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onParentObjectSelection($event)">
+                    <mat-option *ngFor="let option of filteredParentObjectList" [value]="option">
+                        {{option.label}}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row" *ngIf="parentObjectDescription?.fields?.length">
+        <div class="col col-6">
+            <mat-selection-list #parentObjectMetaData
+                (selectionChange)="onParentSelectionChange($event, parentObjectMetaData.selectedOptions)">
+                <mat-list-option [value]="item" [selected]="item.selected"
+                    *ngFor="let item of parentObjectDescription.fields">
+                    {{item.name}}
+                </mat-list-option>
+            </mat-selection-list>
+        </div>
+        <div class="col col-6">
+            <div *ngFor="let item of parentWhereConditions; let i = index">
+                <mat-form-field appearance="outline" class="mr-2">
+                    <mat-label for="condition" *ngIf="i === 0">Condition</mat-label>
+                    <mat-select name="condition" [(ngModel)]="item.condition">
+                        <mat-option *ngFor="let field of parentObjectDescription.fields" [value]="field.name">
+                            {{field.label}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="mr-2">
+                    <mat-label for="operator" *ngIf="i === 0">Operator</mat-label>
+                    <mat-select name="operator" [(ngModel)]="item.operator">
+                        <mat-option *ngFor="let operator of operatorList" [value]="operator.value">
+                            {{operator.label}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="mr-2">
+                    <mat-label for="value" *ngIf="i === 0">Value</mat-label>
+                    <input matInput name="value" [(ngModel)]="item.value" />
+                </mat-form-field>
+                <button mat-icon-button color="primary" aria-label="Add" *ngIf="i === 0"
+                    (click)="onAddCondition($event, parentWhereConditions)">
+                    <mat-icon>add_circle</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" aria-label="Remove" *ngIf="i !== 0"
+                    (click)="onRemoveCondition($event, parentWhereConditions, i)">
+                    <mat-icon>remove_circle</mat-icon>
+                </button>
+            </div>
+            <div class="row">
+                <div class="col col-8">
+                    <mat-form-field appearance="outline" class="mr-2">
+                        <mat-label for="condition">Order By</mat-label>
+                        <mat-select name="sortByKey" [(ngModel)]="parentOrderClause.sortKey">
+                            <mat-option *ngFor="let field of parentObjectDescription.fields" [value]="field.name">
+                                {{field.label}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label for="operator"></mat-label>
+                        <mat-select name="sortByOrder" [(ngModel)]="parentOrderClause.sortBy"
+                            (selectionChange)="onSortBySelection($event, parentOrderClause)">
+                            <mat-option value="asc">Asc</mat-option>
+                            <mat-option value="desc">Desc</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col col-4 mt-2">
+                    <button mat-raised-button color="primary" class="mr-2"
+                        (click)="onApplyParentFilters($event, parentWhereConditions)"
+                        [disabled]="!parentWhereConditions.length">
+                        Apply
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col col-sm-12">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label for="salesforceQuery">Generated Query String</mat-label>
+                        <textarea name="salesforceQuery" matInput class="w-100" row="5"
+                            [ngModel]="salesforceQuery"></textarea>
+                    </mat-form-field>
+                    <div>
+                        <button mat-raised-button color="primary" class="mr-2" (click)="onTransform($event, true)"
+                            [disabled]="!salesforceQuery">
+                            Transform
+                        </button>
+                        <button mat-raised-button color="primary" class="mr-2" (click)="onNext($event)"
+                            [disabled]="!salesforceQuery">
+                            Build Relationship Query
+                        </button>
+                        <button mat-raised-button color="primary" (click)="onExecute($event)"
+                            [disabled]="!salesforceQuery">
+                            Execute
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<ng-template #relationshipQueryBuilder>
+    <div class="row">
+        <div class="col mx-4">
+            <mat-form-field class="w-100">
+                <input type="text" placeholder="Search Child Objects" aria-label="Number" matInput
+                    [matAutocomplete]="autoChildObject" (input)="onChildObjectTypeInput($event)"
+                    [(ngModel)]="selectedChildObjectType.label">
+                <mat-autocomplete #autoChildObject="matAutocomplete" (optionSelected)="onChildObjectSelection($event)">
+                    <mat-option *ngFor="let option of filteredChildObjectList" [value]="option">
+                        {{option.childSObject}}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row" *ngIf="childObjectDescription?.fields?.length">
+        <div class="col col-6">
+            <mat-selection-list #childObjectMetaData selectedOptions=[]
+                (selectionChange)="onChildSelectionChange($event, childObjectMetaData.selectedOptions)">
+                <mat-list-option [value]="item" [selected]="item.selected"
+                    *ngFor="let item of childObjectDescription.fields">
+                    {{item.name}}
+                </mat-list-option>
+            </mat-selection-list>
+        </div>
+        <div class="col col-6">
+            <div *ngFor="let item of childWhereConditions; let i = index">
+                <mat-form-field appearance="outline" class="mr-2">
+                    <mat-label for="condition" *ngIf="i === 0">Condition</mat-label>
+                    <mat-select name="condition" [(ngModel)]="item.condition">
+                        <mat-option *ngFor="let field of childObjectDescription.fields" [value]="field.name">
+                            {{field.label}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="mr-2">
+                    <mat-label for="operator" *ngIf="i === 0">Operator</mat-label>
+                    <mat-select name="operator" [(ngModel)]="item.operator">
+                        <mat-option *ngFor="let operator of operatorList" [value]="operator.value">
+                            {{operator.label}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label for="value" *ngIf="i === 0">Value</mat-label>
+                    <input matInput name="value" [(ngModel)]="item.value" />
+                </mat-form-field>
+                <button mat-icon-button color="primary" aria-label="Add" *ngIf="i === 0"
+                    (click)="onAddCondition($event, childWhereConditions)">
+                    <mat-icon>add_circle</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" aria-label="Remove" *ngIf="i !== 0"
+                    (click)="onRemoveCondition($event, childWhereConditions, i)">
+                    <mat-icon>remove_circle</mat-icon>
+                </button>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <button mat-raised-button color="primary" class="mr-2"
+                        (click)="onApplyChildFilters($event, childWhereConditions)"
+                        [disabled]="!childWhereConditions.length">
+                        Apply
+                    </button>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col col-sm-12">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label for="salesforceQuery">Generated Query String</mat-label>
+                        <textarea matInput row="3" [ngModel]="salesforceSubQuery"></textarea>
+                    </mat-form-field>
+                    <div>
+                        <button mat-raised-button color="primary" class="mr-2" (click)="onTransform($event, false)"
+                            [disabled]="!salesforceQuery">
+                            Transform
+                        </button>
+                        <button mat-raised-button color="primary" (click)="onNext($event)"
+                            [disabled]="!salesforceSubQuery">Test Query</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<ng-template #queryExecution>
+    <div class="row">
+        <div class="col m-4">
+            <div>
+                <h5>Run generated SQL Query</h5>
+                <div class="form-group">
+                    <textarea class="form-control w-100" row="3" [ngModel]="salesforceTestQuery"></textarea>
+                </div>
+                <div>
+                    <button mat-raised-button color="primary" (click)="executeSalesforceQuery(true)"
+                        [disabled]="!salesforceTestQuery">Execute query</button>
+                </div>
+                <pre>{{sqlQueryTestResult | json}}</pre>
+            </div>
+        </div>
+    </div>
+</ng-template>

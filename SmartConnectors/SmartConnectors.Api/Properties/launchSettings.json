@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SmartConnectors.Api": {
+      "commandName": "Project",
+      "commandLineArgs": "host start --build --port 7000 --cors * --pause-on-error"
+    }
+  }
+}

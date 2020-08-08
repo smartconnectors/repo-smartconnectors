@@ -1,0 +1,53 @@
+<h2>Salesforce Login</h2>
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="p-5">
+    <div *ngIf="errorMsg" class="text-danger py-2 w-100 text-center">
+        {{errorMsg}}
+    </div>
+    <div class="form-group">
+        <label for="endpointName">Endpoint Name</label>
+        <input type="text" formControlName="endpointName" class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+        <div *ngIf="submitted && f.endpointName.errors" class="invalid-feedback">
+            <div *ngIf="f.endpointName.errors.required">Endpoint Name is required</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="serverHost">Server Host</label>
+        <input type="text" formControlName="serverHost" class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f.username.errors }" readonly />
+        <div *ngIf="submitted && f.serverHost.errors" class="invalid-feedback">
+            <div *ngIf="f.serverHost.errors.required">Server Host is required</div>
+        </div>
+        <mat-checkbox class="example-margin" (change)="onEnableSandbox($event)">Sandbox</mat-checkbox>
+    </div>
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" formControlName="username" class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+        <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+            <div *ngIf="f.username.errors.required">Username is required</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" formControlName="password" class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+        <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+            <div *ngIf="f.password.errors.required">Password is required</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="securityToken">Security Token</label>
+        <input type="text" value="rCQ8QvlvKYXK6eUhTTRvayu2" formControlName="securityToken" class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+        <div *ngIf="submitted && f.securityToken.errors" class="invalid-feedback">
+            <div *ngIf="f.securityToken.errors.required">Security Token is required</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <button [disabled]="loading" class="btn btn-primary">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            Login
+        </button>
+    </div>
+</form>

@@ -1,0 +1,90 @@
+<div class="row">
+    <div class="col col-sm-12" *ngIf="connectorPos == 'target'">
+        <div class="card">
+            <div class="card-header">
+                <h2>Excel Configuration</h2>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col col-sm-12">
+                        <mat-radio-group aria-label="Select an option" [(ngModel)]="isLocalFileSystem">
+                            <mat-radio-button value="true" class="mr-2">Local File System </mat-radio-button>
+                            <mat-radio-button value="false">Remote Server</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col col-sm-6">
+                        <mat-form-field class="full-width-input" [floatLabel]="never">
+                            <input matInput placeholder="Excel Filename" value="" (blur)="onInputChange($event)"
+                                [(ngModel)]="fileName">
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="col col-sm-12" *ngIf="connectorPos == 'source'">
+        <div class="row">
+            <div class="col col-sm-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Uploaded Documents</h3>
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <app-file-upload-component [fileUploadUrlData]="excelFileUpladUrl"
+                                (fileUploaded)="onFileUpload($event)">
+                            </app-file-upload-component>
+                        </div>
+                        <table class="table m-4">
+                            <tr>
+                                <th>Title</th>
+                                <th>Uploaded Date</th>
+                            </tr>
+                            <tr *ngFor="let item of documents">
+                                <td>
+                                    <a href="javascript:void(0)" (click)="onFileSelected(item.id)">{{item.fileName}}</a>
+                                </td>
+                                <td>{{item.createdDate}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col col-sm-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Extracted Excel Metadata</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-item" *ngFor="let item of sourceExcelMetadata">
+                            {{item}}
+                        </div>
+                    </div>
+                </div>
+                <button mat-raised-button color="primary" class="mt-2" (click)="onNext($event)">
+                    Configure Output
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #databaseConfiguration>
+
+</ng-template>
+
+<ng-template #excelSource>
+
+
+</ng-template>
+<ng-template #databaseTarget>
+
+
+</ng-template>
+<ng-template #operationSummary>
+
+
+</ng-template>

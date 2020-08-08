@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="a0c9848f-0355-46bd-a52e-d8d8cc66e7ac" ChangeDateTime="02/16/2020 15:33:11">
+    <Property Name="ElementName" Value="[dbo].[Operations].[ActiveOperation]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Operations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="OperationTypeId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="d545c3e6-4761-44ff-b83a-b78a25c08da1" ChangeDateTime="02/19/2020 15:57:46">
+    <Property Name="ElementName" Value="[dbo].[Operations].[ProjectId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Operations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="WorkflowId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="7278af26-5b19-416f-8f82-fdbcdd3ba612" ChangeDateTime="03/01/2020 06:35:31">
+    <Property Name="ElementName" Value="[dbo].[Documents].[CreatedOn]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Documents]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CreatedDate" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="d90eca17-2092-4a83-bc2f-6cc0fe066cd7" ChangeDateTime="04/02/2020 17:35:30">
+    <Property Name="ElementName" Value="[dbo].[Operations].[Step]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Operations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="StepCount" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="99849ce7-0bac-4a94-a86e-5f5f8d8bef82" ChangeDateTime="04/02/2020 18:25:52">
+    <Property Name="ElementName" Value="[dbo].[Operations].[WorkflowId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Operations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="WorkflowConnectorId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="13383472-b850-4728-80e2-8080e7c73569" ChangeDateTime="04/05/2020 17:01:51">
+    <Property Name="ElementName" Value="[dbo].[Schedulers].[RepetitionTypeId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Schedulers]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="RecurrenceTypeId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f0d5a412-ddc2-494c-bb14-1aae6ba96be8" ChangeDateTime="04/28/2020 08:11:37">
+    <Property Name="ElementName" Value="[dbo].[Transformations].[WorkflowConnectorId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Transformations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="WorkflowId" />
+  </Operation>
+</Operations>

@@ -1,0 +1,31 @@
+<div>
+    <div class="row">
+        <div class="col col-sm-6">
+            <mat-form-field>
+                <input matInput placeholder="Project Name" [(ngModel)]="projectName" />
+            </mat-form-field>
+        </div>
+        <div class="col col-sm-6">
+            <button mat-raised-button color="primary" (click)="createProject()"
+                [disabled]="!projectName">Create</button>
+        </div>
+    </div>
+    <h3>List of Projects</h3>
+    <div class="row">
+        <div class="col-sm-2" *ngFor="let item of projectList">
+            <div class="card" (click)="navigate(item.id)">
+                <div class="card-header d-flex">
+                    <div>{{item.name}}</div>
+                    <div>
+                        <a (click)="deleteProject(item.id)">
+                            <mat-icon>delete</mat-icon>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

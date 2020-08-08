@@ -1,0 +1,46 @@
+p {
+    font-family: Lato;
+}
+
+.red {
+    background: red;
+}
+
+.selected {
+    background: yellow;
+}
+
+.destselected {
+    background: purple;
+}
+
+.mapped-and-selected {
+    background: purple;
+}
+
+ul {
+    width: 100%;
+    display: inline-block;
+    list-style: none;
+    margin: 0;
+    padding: 0px;
+}
+
+svg {
+    vertical-align: top;
+    height: 800px;
+    width: 250px;
+    margin-left: -30px;
+}
+
+li {
+    border: 1px solid #ccc;
+    padding: 0px 5px;
+    width: 100%;
+    text-align: left;
+}
+
+#destlist {
+    padding-left: 0;
+    vertical-align: top;
+}

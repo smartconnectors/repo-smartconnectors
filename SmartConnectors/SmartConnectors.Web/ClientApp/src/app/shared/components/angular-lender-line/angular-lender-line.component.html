@@ -1,0 +1,24 @@
+<div class="row">
+    <div class="col-sm-4">
+        <input type="text" hidden />
+        <ul id="srclist">
+            <li id="item-{{item.id}}" class="list-item list1" [class.red]="el == ('item-'+item.id)"
+                *ngFor="let item of inputOperations" (click)="startmapping(item.id)">
+                {{item.name}}
+            </li>
+        </ul>
+    </div>
+    <div class="col-sm-4">
+        <svg id="linessvg"></svg>
+    </div>
+    <div class="col-sm-4">
+        <input type="text" placeholder="Search.." name="search" class="form-control" [(ngModel)]="searchterm"
+            (keyup)="searchList($event.target.value)" />
+        <ul id="destlist">
+            <li id="alt-item-{{item.id}}" class="list-item list2" [class.red]="el2 == ('alt-item-'+item.id)"
+                *ngFor="let item of outputOperations" (click)="savemapping(item.id)">
+                {{item.name}}
+            </li>
+        </ul>
+    </div>
+</div>

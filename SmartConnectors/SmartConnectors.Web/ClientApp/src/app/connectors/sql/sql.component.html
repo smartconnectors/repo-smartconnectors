@@ -1,0 +1,46 @@
+<form [formGroup]="connectionForm" (ngSubmit)="onConnectionDetailSubmit()">
+    <div class="card">
+        <div class="card-header">
+            <h3>
+                Configuring a Database Source
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                <label for="condition">Source Name</label>
+                <input type="text" formControlName="sourceName" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="condition">Source Type</label>
+                <select class="form-control" formControlName="sourceType">
+                    <option *ngFor="let option of sourceTypes">
+                        {{option.value}}
+                    </option>
+                </select>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    Connection Parameters
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="condition">Server Name</label>
+                        <input type="text" formControlName="serverName" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="condition">Database Name</label>
+                        <input type="text" formControlName="databaseName" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="condition">Login</label>
+                        <input type="text" formControlName="severLogin" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="condition">Password</label>
+                        <input type="text" formControlName="serverPassword" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

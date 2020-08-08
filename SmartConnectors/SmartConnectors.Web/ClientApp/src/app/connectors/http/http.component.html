@@ -1,0 +1,107 @@
+<div class="row">
+    <div class="col-sm-12">
+        <form [formGroup]="httpForm" class="p-2">
+            <mat-tab-group>
+                <mat-tab label="Basic" class="p-4">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <mat-form-field>
+                                <mat-label>Path</mat-label>
+                                <input matInput formControlName="path">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <mat-form-field>
+                                <mat-label>Method</mat-label>
+                                <input matInput formControlName="method">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </mat-tab>
+                <mat-tab label="Params">
+                    <table class="table">
+                        <tr>
+                            <th>
+                                <mat-label>Key</mat-label>
+                            </th>
+                            <th>
+                                <mat-label>Value</mat-label>
+                            </th>
+                        </tr>
+                        <tr *ngFor="let param of requestParams">
+                            <td>
+                                <mat-form-field>
+                                    <input matInput formControlName="key">
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field>
+                                    <input matInput formControlName="value">
+                                </mat-form-field>
+                            </td>
+                        </tr>
+                    </table>
+                </mat-tab>
+                <mat-tab label="Authorization">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <mat-label>Type</mat-label>
+                            <mat-select formControlName="authorizationType">
+                                <mat-option *ngFor="let option of authorizationTypes">{{option.type}}</mat-option>
+                            </mat-select>
+                        </div>
+                        <div class="col-sm-9">
+                            <mat-form-field class="w-100">
+                                <mat-label>Token</mat-label>
+                                <textarea matInput rows="5" formControlName="authorizationToken"></textarea>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                </mat-tab>
+                <mat-tab label="Headers">
+                    <table class="table">
+                        <tr>
+                            <th>
+                                <mat-label>Key</mat-label>
+                            </th>
+                            <th>
+                                <mat-label>Value</mat-label>
+                            </th>
+                        </tr>
+                        <tr *ngFor="let param of requestHeaders">
+                            <td>
+                                <mat-form-field>
+                                    <input matInput formControlName="key">
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field>
+                                    <input matInput formControlName="value">
+                                </mat-form-field>
+                            </td>
+                        </tr>
+                    </table>
+                </mat-tab>
+                <mat-tab label="Body">
+                    <mat-radio-group aria-label="Select an option">
+                        <mat-radio-button value="1">None</mat-radio-button>
+                        <mat-radio-button value="2">form-data</mat-radio-button>
+                        <mat-radio-button value="1">x-www-form-urlendocoded</mat-radio-button>
+                        <mat-radio-button value="2">raw</mat-radio-button>
+                        <mat-radio-button value="1">binary</mat-radio-button>
+                    </mat-radio-group>
+                    <button mat-button [matMenuTriggerFor]="menu">Json</button>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item>Text</button>
+                        <button mat-menu-item>JSON</button>
+                        <button mat-menu-item>XML</button>
+                        <button mat-menu-item>HTML</button>
+                    </mat-menu>
+                </mat-tab>
+            </mat-tab-group>
+        </form>
+    </div>
+</div>

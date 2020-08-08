@@ -1,0 +1,60 @@
+<header id="app-header" class="app-header">
+    <i id="app-header-menu-button" class="app-header-menu-button fa fa-bars" (click)="toggleMenu()"></i>
+
+    <div id="app-header-logo" class="app-header-logo">
+
+    </div>
+
+    <div id="app-header-title" class="app-header-title has-sub-info">
+        <h1 id="app-header-product" class="app-header-product">Smart Connectors</h1>
+    </div>
+
+    <div id="app-header-user" class="app-header-user d-none d-sm-block">
+        <div
+             id="app-header-user-info"
+             class="app-header-user-info d-none d-md-inline-flex">
+            <p id="app-header-user-handle" class="app-header-user-handle d-none d-md-block m-0">
+                Ramesh Kumar
+            </p>
+
+            <p id="app-header-user-title" class="app-header-user-title d-none d-md-block m-0">
+                Admin
+            </p>
+        </div>
+
+        <div id="app-header-user-avatar" class="app-header-user-avatar"></div>
+
+        <i
+           id="app-header-user-angle"
+           class="app-header-user-angle fa fa-angle-down"
+           aria-hidden="true"></i>
+    </div>
+
+    <div id="app-header-more" class="app-header-more d-xl-none">
+        <i id="app-header-more-icon" class="app-header-more-icon fa fa-ellipsis-v"></i>
+    </div>
+
+    <div id="app-header-icon-wrap" class="unified-navbar">
+
+    </div>
+</header>
+
+<!-- User Context -->
+<div id="app-user-context" class="app-user-context">User Context</div>
+
+<nav id="app-left-navigation" class="app-left-navigation app-left-navigation-dark">
+    <ul id="app-left-navigation-items" class="app-left-navigation-items">
+        <li>
+            <a class="app-left-navigation-item no-subitems" href="#">
+                <i class="app-left-navigation-item-icon fa fa-home"></i>
+                <span class="app-left-navigation-item-display">Home</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<main id="shell" class="app-page-container">
+    <section class="container-fluid position-relative">
+        <router-outlet></router-outlet>
+    </section>
+</main>

@@ -1,0 +1,83 @@
+﻿
+        public T Convert<T>(ExpandoObject source, T example)
+    where T : class
+        {
+            IDictionary<string, object> dict = source;
+
+            var ctor = example.GetType().GetConstructors().Single();
+
+            var parameters = ctor.GetParameters();
+
+            var parameterValues = parameters.Select(p => dict[p.Name]).ToArray();
+
+            return (T)ctor.Invoke(parameterValues);
+        }
+
+        public static List<dynamic> ListDictionaryToListDynamic(List<Dictionary<string, object>> dbRecords)
+        {
+            var eRecords = new List<dynamic>();
+            foreach (var record in dbRecords)
+            {
+                var eRecord = new ExpandoObject() as IDictionary<string, object>;
+                foreach (var kvp in record)
+                {
+                    eRecord.Add(kvp);
+                }
+                eRecords.Add(eRecord);
+            }
+            return eRecords;
+        }
+
+        public string Flatten(ExpandoObject expando)
+        {
+            StringBuilder sb = new StringBuilder();
+            List<string> contents = new List<string>();
+            var d = expando as IDictionary<string, object>;
+            sb.Append("{ ");
+
+            foreach (KeyValuePair<string, object> kvp in d)
+            {
+                if (kvp.Value is ExpandoObject)
+                {
+                    ExpandoObject expandoValue = (ExpandoObject)kvp.Value;
+                    StringBuilder expandoBuilder = new StringBuilder();
+                    expandoBuilder.Append(String.Format("\"{0}\":[", kvp.Key));
+
+                    String flat = Flatten(expandoValue);
+                    expandoBuilder.Append(flat);
+
+                    string expandoResult = expandoBuilder.ToString();
+                    // expandoResult = expandoResult.Remove(expandoResult.Length - 1);
+                    expandoResult += "]";
+                    contents.Add(expandoResult);
+                }
+                else if (kvp.Value is List<Object>)
+                {
+                    List<Object> valueList = (List<Object>)kvp.Value;
+
+                    StringBuilder listBuilder = new StringBuilder();
+                    listBuilder.Append(String.Format("\"{0}\":[", kvp.Key));
+                    foreach (Object item in valueList)
+                    {
+                        if (item is ExpandoObject)
+                        {
+                            String flat = Flatten(item as ExpandoObject);
+                            listBuilder.Append(flat + ",");
+                        }
+                    }
+
+                    string listResult = listBuilder.ToString();
+                    listResult = listResult.Remove(listResult.Length - 1);
+                    listResult += "]";
+                    contents.Add(listResult);
+
+                }               
+            }
+            sb.Append(String.Join(",", contents.ToArray()));
+
+            sb.Append("}");
+
+            var obj = JsonConvert.DeserializeObject(sb.ToString());
+
+            return sb.ToString();
+        }

@@ -1,0 +1,74 @@
+.compnent-section {
+  min-height: 300px;
+  border-bottom: 2px solid #ccc;
+}
+
+.drop-list {
+  border: solid 1px #ccc;
+  min-height: 60px;
+  background: white;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+}
+
+.source-tile,
+.target-tile {
+  padding: 10px 5px;
+  color: rgba(0, 0, 0, 0.87);
+  display: block;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  cursor: move;
+  background: white;
+  font-size: 14px;
+}
+
+.source-container {
+  .drop-list {
+    display: block;
+  }
+
+  .source-tile {
+    width: 100px;
+    float: left;
+  }
+}
+
+.drop-box {
+  padding: 20px 10px;
+  border-bottom: dashed 1px #ccc;
+}
+
+.line-divider {
+  margin-top: 40px;
+  margin-left: 5px;
+}
+
+.active {
+  border: 1px solid blue;
+}
+
+.mat-tree-node {
+  min-height: 24px;
+
+  .mat-icon-button {
+    width: 40px;
+    height: 24px;
+    flex-shrink: 0;
+    line-height: 24px;
+  }
+}
+
+.dummy-tile {
+  width: 90px;
+  height: 80px;
+}
+
+::ng-deep {
+  .mat-ink-bar {
+    background-color: #ff8100 !important;
+  }
+}

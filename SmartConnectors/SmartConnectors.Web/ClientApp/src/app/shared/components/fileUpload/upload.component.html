@@ -1,0 +1,13 @@
+<div class="row mt-2">
+    <div class="col-12">
+        <input #file type="file" multiple (change)="upload(file.files)" class="form-control" />
+        <span style="font-weight:bold;color:green;" *ngIf="progress > 0 && progress < 100">
+            {{progress}}%
+        </span>
+        <div>
+            <span style="font-weight:bold;color:green;" *ngIf="message">
+                {{message}}
+            </span>
+        </div>
+    </div>
+</div>

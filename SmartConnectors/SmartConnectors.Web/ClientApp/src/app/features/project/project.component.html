@@ -1,0 +1,151 @@
+<div class="row compnent-section" cdkDropListGroup>
+    <div class="col-2">
+        <div class="card">
+            <div class="card-body p-1">
+                <div class="source-container">
+                    <div class="mb-2">
+                        <input type="text" placeholder="Search" class="form-control" [(ngModel)]="connectorName" />
+                    </div>
+                    <div cdkDropList #connectorsList="cdkDropList" [cdkDropListData]="displayConnectorLists"
+                        [cdkDropListConnectedTo]="[workflowsList]" class="drop-list"
+                        (cdkDropListDropped)="drop($event)">
+                        <div class="source-tile" *ngFor="let item of displayConnectorLists" [cdkDragData]="item"
+                            cdkDrag>
+                            <div>
+                                <img src="/assets/images/{{item.companyLogo}}" height="75px" width="75px" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-7">
+        <div class="card">
+            <div class="card-body text-center p-2">
+                <div class="target-container">
+                    <mat-tab-group [selectedIndex]="selectedTabIndex" (selectedTabChange)="onTabChange($event)">
+                        <mat-tab *ngFor="let tab of activeWorkflows">
+                            <ng-template mat-tab-label>
+                                <div class="d-flex">
+                                    <div class="pt-2">
+                                        {{tab.name}}
+                                    </div>
+                                    <button mat-icon-button class="text-danger fa-lg" (click)="removeTab($event, tab)">
+                                        <mat-icon>close</mat-icon>
+                                    </button>
+                                </div>
+                            </ng-template>
+                            <div class="pt-2">
+                                <div *ngIf="tab.isActive" cdkDropList #workflowsList="cdkDropList"
+                                    [cdkDropListData]="workflowConnectors" [cdkDropListConnectedTo]="[connectorsList]"
+                                    class="drop-list" (cdkDropListDropped)="drop($event)">
+                                    <div class="target-tile" *ngFor="let item of workflowConnectors; index as i"
+                                        (click)="chooseConnectors(item)" [cdkDragData]="item" cdkDrag>
+                                        <div class="d-flex">
+                                            <div class="target-tile">
+                                                <div [ngClass]="{'active': item.isSelected}">
+                                                    <img src="/assets/images/{{item.companyLogo}}" height="75px"
+                                                        width="75px" />
+                                                </div>
+                                            </div>
+                                            <div class="line-divider"
+                                                *ngIf="i >= 0 && i <= workflowConnectors.length - 2">
+                                                <mat-icon>arrow_right_alt</mat-icon>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="workflowConnectors.length == 0">
+                                    <p class="text-center">Please drag and drop connectors to begin creating operations
+                                    </p>
+                                </div>
+                            </div>
+                        </mat-tab>
+                    </mat-tab-group>
+                    <div class="text-right mt-3" *ngIf="activeWorkflows.length">
+                        <button mat-raised-button color="default" (click)="viewLogs()" class="mr-2">View
+                            Logs</button>
+                        <button mat-raised-button color="primary" (click)="runOperation()" class="mr-2">Run
+                            Operation</button>
+                        <button mat-raised-button color="primary" (click)="scheduleOperation()">Schedule
+                            Operation</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex">
+                    <mat-label class="w-100">Existing Workflows</mat-label>
+                    <mat-icon class="mat-icon-rtl-mirror" (click)="openAddNewWorkflowDialog()">
+                        add
+                    </mat-icon>
+                </div>
+            </div>
+            <div class="card-body pl-0">
+                <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+                    <!-- This is the tree node template for leaf nodes -->
+                    <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+                        <!-- use a disabled button to provide padding for tree leaf -->
+                        <div class="d-flex pl-2">
+                            <a (click)="openWorkflow(node)"> {{node.name}}</a>
+                            <button mat-icon-button class="text-danger" (click)="removeWorkflow(node)">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </div>
+
+                    </mat-tree-node>
+                    <!-- This is the tree node template for expandable nodes -->
+                    <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
+                        <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.name">
+                            <mat-icon class="mat-icon-rtl-mirror">
+                                {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                            </mat-icon>
+                        </button>
+                        {{node.name}}
+                    </mat-tree-node>
+                </mat-tree>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row pt-3">
+    <div class="col col-sm-12">
+        <app-salesforce-operation *ngIf="selectedOperationData.connectorType == 'salesforce'"
+            [stepData]="currentStepCount" [operationData]="selectedOperationData" [tokenData]="salesforceToken"
+            [savedOperationsData]="savedOperations" [operationTypesData]="operationTypes"
+            (inputOperationChanged)="onInputOperationChanged($event)"
+            (outputOperationChanged)="onOutputOperationChanged($event)"
+            (operationStateChanged)="onOperationStateChanged($event)" (actionSelected)="onActionSelected($event)">
+        </app-salesforce-operation>
+        <app-excel-configuration *ngIf="selectedOperationData.connectorType == 'excel'" [stepData]="currentStepCount"
+            [operationData]="selectedOperationData" (operationChanged)="onExcelOperationChanged($event)"
+            (operationStateChanged)="onOperationStateChanged($event)" (actionSelected)="onActionSelected($event)"
+            (actionSelected)="onActionSelected($event)">
+        </app-excel-configuration>
+        <app-transformation *ngIf="selectedOperationData.connectorType == 'transformation'"
+            [stepData]="currentStepCount" [savedOperationsData]="savedOperations"
+            [inputOperationData]="inputOperationList" [transformationData]="transformationData"
+            [outputOperationData]="outputOperationList" (transformationChanged)="onTransformationChanged($event)"
+            (operationStateChanged)="onOperationStateChanged($event)" (actionSelected)="onActionSelected($event)">
+        </app-transformation>
+        <app-script *ngIf="selectedOperationData.connectorType == 'script'" [stepData]="currentStepCount"
+            [inputOperationData]="inputOperationList" [outputOperationData]="outputOperationList"
+            (scriptChanged)="onScriptChanged($event)" (operationStateChanged)="onOperationStateChanged($event)"
+            (actionSelected)="onActionSelected($event)">
+        </app-script>
+        <app-sql *ngIf="selectedOperationData.connectorType == 'mysql'" [stepData]="currentStepCount"
+            [inputOperationData]="inputOperationList" [outputOperationData]="outputOperationList"
+            (scriptChanged)="onSqlChanged($event)" (operationStateChanged)="onOperationStateChanged($event)"
+            (actionSelected)="onActionSelected($event)">
+        </app-sql>
+        <app-http *ngIf="selectedOperationData.connectorType == 'http'" [stepData]="currentStepCount"
+            [inputOperationData]="inputOperationList" [outputOperationData]="outputOperationList"
+            (scriptChanged)="onHttpChanged($event)" (operationStateChanged)="onOperationStateChanged($event)"
+            (actionSelected)="onActionSelected($event)">
+        </app-http>
+    </div>
+</div>

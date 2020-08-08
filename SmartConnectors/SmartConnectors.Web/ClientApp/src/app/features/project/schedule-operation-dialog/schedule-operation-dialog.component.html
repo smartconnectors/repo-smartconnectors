@@ -1,0 +1,118 @@
+<div class="row">
+    <div class="col-sm-6 mb-3">
+        <button mat-raised-button color="primary" (click)="newSchedule($event)">New Schedule</button>
+    </div>
+    <div class="col-sm-12" *ngIf="savedSchedules.length">
+        <table class="table">
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Details
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+            <tr *ngFor="let item of savedSchedules">
+                <td>
+                    {{item.name}}
+                </td>
+                <td>
+                    <div>Start Date: {{item.startDate}}</div>
+                    <div>End Date: {{item.endDate}}</div>
+                </td>
+                <td>
+                    <button mat-icon-button (click)="editSchedule($event, item)" class="mr-1">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="deleteSchedule($event,item)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="card" *ngIf="showEditForm">
+    <div class="card-header">
+        <h3>Fill the details to schedule background job.</h3>
+    </div>
+    <div class="card-body">
+        <form [formGroup]="schedulerForm">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Name" autocomplete="off"
+                            formControlName="name" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <mat-form-field>
+                        <mat-label>Start date</mat-label>
+                        <input matInput [matDatepicker]="startDatepicker" formControlName="startDate">
+                        <mat-datepicker-toggle matSuffix [for]="startDatepicker"></mat-datepicker-toggle>
+                        <mat-datepicker #startDatepicker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-6">
+                    <mat-form-field>
+                        <mat-label>End date</mat-label>
+                        <input matInput [matDatepicker]="endDatepicker" formControlName="endDate">
+                        <mat-datepicker-toggle matSuffix [for]="endDatepicker"></mat-datepicker-toggle>
+                        <mat-datepicker #endDatepicker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <mat-form-field>
+                        <mat-label>Start Time</mat-label>
+                        <input matInput />
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-6">
+                    <mat-form-field>
+                        <mat-label>End Time</mat-label>
+                        <input matInput />
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <mat-checkbox>Repeated</mat-checkbox>
+
+                </div>
+                <div class="col-sm-6">
+                    <mat-form-field>
+                        <mat-label>Repeat Options</mat-label>
+                        <mat-select formControlName="repeatOptionId">
+                            <mat-option *ngFor="let item of schedulerRepeatOptions" [value]="item.id">
+                                {{item.value}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="text-center mt-4">
+                        <button mat-raised-button color="default" (click)="onClose()" class="mr-2">Close</button>
+                        <button mat-raised-button color="default" (click)="onReset()" class="mr-2">Reset</button>
+                        <button mat-raised-button color="primary" (click)="saveSchedule()">Save Schedule</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row mt-4" *ngIf="!showEditForm">
+    <div class="col-sm-12">
+        <div class="text-center">
+            <button mat-raised-button color="primary" (click)="onClose()" class="mr-2">Close</button>
+        </div>
+    </div>
+</div>
