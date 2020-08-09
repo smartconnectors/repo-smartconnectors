@@ -1,0 +1,15 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "DATABASE_CONNECTION": "Data Source=RKUMAR11;Initial Catalog=SmartConnectors.Database;Integrated Security=True",
+//    "DATABASE_CONNECTION": "Server=tcp:smartconnectors.database.windows.net,1433;Initial Catalog=SmartConnectors.Database;Persist Security Info=False;User ID=smart_admin;Password=Password@1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
+    "BLOBSTORAGE_CONNECTION": "DefaultEndpointsProtocol=https;AccountName=smartconnectorsdb;AccountKey=GThW9FXgzoQpbbvZt1EE6DTyfWWVrNaw8TMUh2Ao/8yXdvWBQLCRfdO2/jZrjczs5Yf3rbz0Peku+yhXIz9n4g==;EndpointSuffix=core.windows.net",
+    "BLOB_CONTAINER": "uploads"
+  },
+  "Host": {
+    "CORS": "*",
+    "LocalHttpPort": 8100
+  }
+}
